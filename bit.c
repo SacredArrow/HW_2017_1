@@ -21,32 +21,19 @@ int thirdBits(void) {
 }
 
 int fitsBits(int x, int n) {
-  int max = (1 << n - 1) - 1;
-  int min = ~max;
-  printf("%d\n", max);
-  printf("%d\n", min);
-  int x1 = (max - x + 1) >> 31;
-  printf("%d\n", x1);
-  int x2 = (x - min + 1) >> 31;
-  printf("%d\n", x2);
-  return (!x1 & !x2);
+  int gr_zero = x >> 31;
+  return !(((~x & gr_zero) + (x & ~gr_zero)) >> (n + ~0));
 }
 
 int sign(int x) {
-  int inverted = ~x + 1;
-  inverted = (inverted >> 31);
-  x = x >> 31;
-  x = x & 1;
-  int temp = x & inverted;
-  x = x + inverted + temp;
-  x = x ^ (~0);
-  x += 1;
+  int shift = x >> 31;
+  x = shift + (!shift & !!x);
   return x;
 }
 
 int getByte(int x, int n) {
   int one = 255;
-  x = x >> (n * 8);
+  x = x >> (n << 3);
   return x & one;
 }
 
@@ -57,10 +44,10 @@ int logicalShift(int x, int n) {
 }
 
 int addOK(int x, int y) {
-  int sum = x + y;
-  int sub1 = sum - x;
-  int sub2 = sum - y;
-  return !(sub1 >> 31) & !(sub2 >> 31);
+  int sx = x >> 31;
+  int sy = y >> 31;
+  int ssum = (x + y) >> 31;
+  return !(~(sx ^ sy) & (sy ^ ssum));
 }
 
 int bang(int x) {
@@ -87,7 +74,7 @@ int isPower2(int x) { return (!(x & (x - 1))) & !!x & !(x >> 31); }
 
 int main(int argc, char const *argv[]) {
   // for (int i = -200; i <= 100; i++)
-  printf("%d\n", fitsBits(1 << 31, 32));
+  printf("%d\n", addOK(-2147483647, 2147483647));
   return 0;
 }
 
