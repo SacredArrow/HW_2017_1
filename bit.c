@@ -70,11 +70,14 @@ int conditional(int x, int y, int z) {
   return (y_con + x_con);
 }
 
-int isPower2(int x) { return (!(x & (x - 1))) & !!x & !(x >> 31); }
+int isPower2(int x) {
+  int minus1 = ~0;
+  return (!(x & (x + minus1))) & !!x & !(x >> 31);
+}
 
 int main(int argc, char const *argv[]) {
   // for (int i = -200; i <= 100; i++)
-  printf("%d\n", addOK(-2147483647, 2147483647));
+  printf("%d\n", isPower2(1023));
   return 0;
 }
 
