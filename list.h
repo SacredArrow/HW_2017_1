@@ -28,5 +28,7 @@ void print_list(struct LinkedList *);
 
 void clear_list(struct LinkedList *);
 
+void reverse_list(struct LinkedList *);
+
 void interface();
 #endif

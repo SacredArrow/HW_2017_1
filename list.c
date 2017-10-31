@@ -84,7 +84,7 @@ void del_element(struct LinkedList *list) {
   int value;
   scanf("%d", &value);
   struct Node *i = list->head;
-  struct Node *last;
+  struct Node *last = 0;
   while (i) {
     if (i->value == value) {
       if (i == list->head) {
@@ -126,7 +126,7 @@ void print_list(struct LinkedList *list) {
 
 void clear_list(struct LinkedList *list) {
   struct Node *i = list->head;
-  struct Node *temp;
+  struct Node *temp = 0;
   while (i) {
     temp = i->next;
     free(i);
@@ -135,9 +135,37 @@ void clear_list(struct LinkedList *list) {
   free(list);
 }
 
+void reverse_list(struct LinkedList *list) {
+  struct Node *last = list->head;
+  struct Node *i = 0;
+  struct Node *temp = 0;
+  if (last)
+    i = last->next;
+  else {
+    printf("Error!\n");
+    return;
+  }
+  if (i)
+    temp = i->next;
+  else {
+    printf("Error!\n");
+    return;
+  }
+  while (i) {
+    i->next = last;
+    last = i;
+    i = temp;
+    if (i)
+      temp = temp->next;
+  }
+  list->head->next = 0;
+  temp = list->head;
+  list->head = list->end;
+  list->end = temp;
+}
+
 void interface() {
-  struct LinkedList *list;
-  int initialized = 0;
+  struct LinkedList *list = 0;
   while (1) {
     printf("Please, choose, what do you want to do:\n");
     printf("1 - Create list\n");
@@ -147,19 +175,20 @@ void interface() {
     printf("5 - Delete element\n");
     printf("6 - Print list\n");
     printf("7 - Clear list\n");
-    func functions[] = {push,        push_back,  push_after,
-                        del_element, print_list, clear_list};
+    printf("8 - Reverse list\n");
+    func functions[] = {push,       push_back,  push_after,  del_element,
+                        print_list, clear_list, reverse_list};
     int number;
     scanf("%d", &number);
     if (number == 1) {
       list = createList();
-      initialized = 1;
       continue;
     }
-    if (initialized) {
+    if (list) {
       functions[number - 2](list);
-      if (number == 7)
-        initialized = 0;
+      if (number == 7) {
+        list = 0;
+      }
     } else
       printf("Create list first!\n\n");
   }
