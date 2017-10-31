@@ -14,17 +14,19 @@ struct LinkedList {
 
 struct Node *createNode(int);
 
-void push_back(struct LinkedList *, int);
+void push_back(struct LinkedList *);
 
-void push(struct LinkedList *, int);
+void push(struct LinkedList *);
 
-struct LinkedList *createList(int);
+struct LinkedList *createList();
 
-void push_after(struct LinkedList *, int, int);
+void push_after(struct LinkedList *);
 
-void del_element(struct LinkedList *, int);
+void del_element(struct LinkedList *);
 
 void print_list(struct LinkedList *);
 
 void clear_list(struct LinkedList *);
+
+void interface();
 #endif
