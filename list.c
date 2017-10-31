@@ -164,6 +164,42 @@ void reverse_list(struct LinkedList *list) {
   list->end = temp;
 }
 
+void create_loop(struct LinkedList *list) {
+  struct Node *temp = 0;
+  printf("Please, enter the number of element to create a loop:\n");
+  int value;
+  scanf("%d", &value);
+  if (value > list->length)
+    printf("Wrong value!\n");
+  else {
+    temp = list->head;
+    for (int i = 1; i < value; i++)
+      temp = temp->next;
+  }
+  list->end->next = temp;
+}
+
+void find_a_loop(struct LinkedList *list) {
+  struct Node *pointer1 = list->head->next;
+  struct Node *pointer2 = list->head;
+  int i = 0;
+  while (i <= 100000) {
+    if (pointer1 == pointer2) {
+      printf("Loop found!\n");
+      return;
+    }
+    if (!pointer1 || !pointer2) {
+      printf("No loop!\n");
+      return;
+    }
+    pointer1 = pointer1->next;
+    if (i % 2 != 0)
+      pointer2 = pointer2->next;
+    i++;
+  }
+  printf("Loop limit exceeded!\n");
+}
+
 void interface() {
   struct LinkedList *list = 0;
   while (1) {
@@ -176,8 +212,11 @@ void interface() {
     printf("6 - Print list\n");
     printf("7 - Clear list\n");
     printf("8 - Reverse list\n");
-    func functions[] = {push,       push_back,  push_after,  del_element,
-                        print_list, clear_list, reverse_list};
+    printf("9 - Create a loop\n");
+    printf("10 - Find a loop\n");
+    func functions[] = {push,         push_back,   push_after,
+                        del_element,  print_list,  clear_list,
+                        reverse_list, create_loop, find_a_loop};
     int number;
     scanf("%d", &number);
     if (number == 1) {

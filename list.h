@@ -30,5 +30,9 @@ void clear_list(struct LinkedList *);
 
 void reverse_list(struct LinkedList *);
 
+void create_loop(struct LinkedList *);
+
+void find_a_loop(struct LinkedList *);
+
 void interface();
 #endif
