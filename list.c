@@ -147,10 +147,13 @@ void interface() {
     printf("5 - Delete element\n");
     printf("6 - Print list\n");
     printf("7 - Clear list\n");
+    printf("100 - Exit\n");
     func functions[] = {push,        push_back,  push_after,
                         del_element, print_list, clear_list};
     int number;
     scanf("%d", &number);
+    if (number == 100)
+      return 0;
     if (number == 1) {
       list = createList();
       initialized = 1;
