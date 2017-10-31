@@ -35,7 +35,7 @@ void push(struct LinkedList *list, int value) {
 struct LinkedList *createList(int value) {
   struct LinkedList *list = calloc(1, sizeof(struct LinkedList));
   struct Node *node = createNode(value);
-  list->length = 0;
+  list->length = 1;
   list->head = node;
   list->end = node;
   return list;
