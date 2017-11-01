@@ -12,9 +12,9 @@ int main(int argc, char const *argv[]) {
   unsigned int s2[256];
   for (int i = 0; i < x; i++)
     s1[i] = (int)s1_1[i];
-  for (int i = 0; i < x; i++)
+  for (int i = 0; i < y; i++)
     s2[i] = (int)s2_1[i];
-  for (int i = 0; i < x; i++) {
+  for (int i = 0; i < 256; i++) {
     if (s1[i] == s2[i])
       continue;
     else {
