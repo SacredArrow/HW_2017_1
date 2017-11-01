@@ -10,6 +10,10 @@ int main(int argc, char const *argv[]) {
   int y = strlen(s2_1);
   unsigned int s1[256];
   unsigned int s2[256];
+  for (int i = 0; i < 256; i++) {
+    s1[i] = 0;
+    s2[i] = 0;
+  }
   for (int i = 0; i < x; i++)
     s1[i] = (int)s1_1[i];
   for (int i = 0; i < y; i++)
