@@ -34,18 +34,25 @@ void strcat(char *dst, char *src) {
 }
 
 int strcmp(char *s1, char *s2) {
-  int l = strlen(s1);
-  for (int i = 0; i < l; i++) {
+  int i = 0;
+  while (s1[i] != '\0' && s2[i] != '\0') {
     if (s1[i] - s2[i] != 0) {
       return s1[i] - s2[i];
     }
+    i++;
   }
-  return 0;
+  if (s1[i] == s2[i]) {
+    return 0;
+  } else if (s1[i] == '\0') {
+    return -1;
+  } else {
+    return 1;
+  }
 }
 
 int main(int argc, char const *argv[]) {
-  char a[9] = "app";
-  char b[5] = "cpp";
+  char a[9] = "apple";
+  char b[5] = "app";
   // strcat(a, b);
   printf("%d\n", strcmp(a, b));
   return 0;
