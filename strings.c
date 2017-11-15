@@ -22,7 +22,7 @@ void strcpy(char *dst, char *src) {
   }
 }
 
-void ctrcat(char *dst, char *src) {
+void strcat(char *dst, char *src) {
   int i, j;
 
   for (i = 0; dst[i] != 0; i++)
@@ -34,12 +34,8 @@ void ctrcat(char *dst, char *src) {
 }
 
 int strcmp(char *s1, char *s2) {
-  if (strlen(s1) < strlen(s2)) {
-    return -1;
-  } else if (strlen(s1) > strlen(s2)) {
-    return 1;
-  }
-  for (int i = 0; i < strlen(s1); i++) {
+  int l = strlen(s1);
+  for (int i = 0; i < l; i++) {
     if (s1[i] - s2[i] != 0) {
       return s1[i] - s2[i];
     }
@@ -48,9 +44,9 @@ int strcmp(char *s1, char *s2) {
 }
 
 int main(int argc, char const *argv[]) {
-  char a[9] = "abcd";
-  char b[5] = "abcd";
-
+  char a[9] = "app";
+  char b[5] = "cpp";
+  // strcat(a, b);
   printf("%d\n", strcmp(a, b));
   return 0;
 }
