@@ -93,7 +93,7 @@ int main(int argc, char const *argv[]) {
   float a, b;
   printf("Please, choose a method:");
   scanf("%d", &number);
-  if (number >= 1 && number <= 3) {
+  if (number >= 1 && number <= sizeof(methods) / sizeof(methods[0])) {
     printf("Please, enter 2 values:");
     scanf("%f %f", &a, &b);
     float goal = a / b;
