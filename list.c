@@ -224,6 +224,7 @@ void interface() {
     printf("8 - Reverse list\n");
     printf("9 - Create a loop\n");
     printf("10 - Find a loop\n");
+    printf("11 - Exit\n");
     func functions[] = {push,         push_back,   push_after,
                         del_element,  print_list,  clear_list,
                         reverse_list, create_loop, find_a_loop};
@@ -232,6 +233,10 @@ void interface() {
     if (number == 1) {
       list = createList();
       continue;
+    }
+    if (number == sizeof(functions) / sizeof(functions[0]) + 2) {
+      printf("Bye!\n");
+      exit(0);
     }
     if (list) {
       functions[number - 2](list);
