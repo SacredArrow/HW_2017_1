@@ -16,6 +16,10 @@ typedef void (*func)(struct LinkedList *);
 
 struct Node *createNode(int value) {
   struct Node *node = calloc(1, sizeof(struct Node));
+  if (!node) {
+    printf("Error while allocating memory!\n");
+    exit(1);
+  }
   node->value = value;
   return node;
 }
@@ -45,6 +49,10 @@ struct LinkedList *createList() {
   int value;
   scanf("%d", &value);
   struct LinkedList *list = calloc(1, sizeof(struct LinkedList));
+  if (!list) {
+    printf("Error while allocating memory!\n");
+    exit(1);
+  }
   struct Node *node = createNode(value);
   list->length = 1;
   list->head = node;
@@ -114,9 +122,9 @@ void del_element(struct LinkedList *list) {
 void print_list(struct LinkedList *list) {
   struct Node *i = list->head;
   while (i) {
-    if (i != list->end)
+    if (i != list->end) {
       printf("%d -> ", i->value);
-    else {
+    } else {
       printf("%d\n", i->value);
       return;
     }
@@ -139,9 +147,9 @@ void reverse_list(struct LinkedList *list) {
   struct Node *last = list->head;
   struct Node *i = 0;
   struct Node *temp = 0;
-  if (last)
+  if (last) {
     i = last->next;
-  else {
+  } else {
     printf("Error!\n");
     return;
   }
@@ -169,12 +177,13 @@ void create_loop(struct LinkedList *list) {
   printf("Please, enter the number of element to create a loop:\n");
   int value;
   scanf("%d", &value);
-  if (value > list->length)
+  if (value > list->length) {
     printf("Wrong value!\n");
-  else {
+  } else {
     temp = list->head;
-    for (int i = 1; i < value; i++)
+    for (int i = 1; i < value; i++) {
       temp = temp->next;
+    }
   }
   list->end->next = temp;
 }
@@ -193,8 +202,9 @@ void find_a_loop(struct LinkedList *list) {
       return;
     }
     pointer1 = pointer1->next;
-    if (i % 2 != 0)
+    if (i % 2 != 0) {
       pointer2 = pointer2->next;
+    }
     i++;
   }
   printf("Loop limit exceeded!\n");
@@ -225,7 +235,7 @@ void interface() {
     }
     if (list) {
       functions[number - 2](list);
-      if (number == 7) {
+      if (functions[number - 2] == clear_list) {
         list = 0;
       }
     } else
