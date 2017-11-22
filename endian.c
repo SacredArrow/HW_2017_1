@@ -1,10 +1,10 @@
 #include <stdio.h>
 union Data {
-  int  i;
+  int i;
   char c[sizeof(int)];
 };
 
-int main(int argc, char const * argv[]){
+int main(int argc, char const *argv[]) {
   union Data data;
 
   data.i = 0x01020304;
