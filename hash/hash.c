@@ -29,6 +29,10 @@ int hash(char *str) {
 
 struct LinkedList *createTable(int size) {
   struct LinkedList *a = malloc(size * sizeof(struct LinkedList));
+  if (!a) {
+    printf("Error!\n");
+    exit(1);
+  }
   return a;
 }
 
@@ -38,6 +42,10 @@ void insert(struct LinkedList *table, char *key, int value, int length) {
   struct Node *last = table[h].head;
   if (!(table[h].head)) {
     struct Node *node = malloc(sizeof(struct Node));
+    if (!node) {
+      printf("Error!\n");
+      exit(1);
+    }
     node->value = value;
     char *tmp = malloc(length + 1);
     if (!tmp) {
@@ -62,13 +70,17 @@ void insert(struct LinkedList *table, char *key, int value, int length) {
     last->value = value;
   } else {
     struct Node *node = malloc(sizeof(struct Node));
+    if (!node) {
+      printf("Error!\n");
+      exit(1);
+    }
     node->value = value;
     char *tmp = malloc(length + 1);
-    tmp[sizeof(key)] = '\0';
     if (!tmp) {
       printf("Error!\n");
       exit(1);
     }
+    tmp[sizeof(key)] = '\0';
     strcpy(tmp, key);
     node->key = tmp;
     last->next = node;
@@ -122,6 +134,10 @@ void add(struct LinkedList *table, char *key, int length) {
   struct Node *last = table[h].head;
   if (!(table[h].head)) {
     struct Node *node = malloc(sizeof(struct Node));
+    if (!node) {
+      printf("Error!\n");
+      exit(1);
+    }
     node->value = 1;
     char *tmp = malloc(length + 1);
     if (!tmp) {
@@ -148,11 +164,11 @@ void add(struct LinkedList *table, char *key, int length) {
     struct Node *node = malloc(sizeof(struct Node));
     node->value = 1;
     char *tmp = malloc(length + 1);
-    tmp[sizeof(key)] = '\0';
     if (!tmp) {
       printf("Error!\n");
       exit(1);
     }
+    tmp[sizeof(key)] = '\0';
     strcpy(tmp, key);
     node->key = tmp;
     last->next = node;
@@ -162,11 +178,23 @@ void add(struct LinkedList *table, char *key, int length) {
 
 void statisctics(struct LinkedList *table) {
   int sum = 0;
+  int diff_sum = 0;
+  int max_l = 0;
+  int min_l = table[0].length;
   for (int i = 0; i < size; i++) {
     printf("Длина цепочки %d: %d\n", i, table[i].length);
+    if (table[i].length > max_l) {
+      max_l = table[i].length;
+    }
+    if (table[i].length < min_l) {
+      min_l = table[i].length;
+    }
     sum += table[i].length;
   }
-  printf("Всего ключей(слов): %d\n", sum);
+  printf("Различных ключей(слов): %d\n", sum);
+  printf("Среднее количество ключей в списке: %f\n", (float)sum / size);
+  printf("Самая длинная цепочка: %d ключей\n", max_l);
+  printf("Самая короткая цепочка: %d ключей\n", min_l);
   char *word = "";
   int value = 0;
   for (int i = 0; i < size; i++) {
@@ -176,10 +204,13 @@ void statisctics(struct LinkedList *table) {
         word = temp->key;
         value = temp->value;
       }
+      diff_sum += temp->value;
       temp = temp->next;
     }
   }
   printf("Самое частое слово: %s\n", word);
+  printf("Всего ключей(слов): %d\n", diff_sum);
+  printf("Средняя частота слова: %f\n", ((float)diff_sum / sum));
 }
 
 void parseFile(struct LinkedList *table, FILE *file) {
@@ -220,7 +251,7 @@ int main(int argc, char const *argv[]) {
   clock_t time1 = clock();
   FILE *file = fopen(name, "r");
   parseFile(t, file);
-  printTable(t);
+  // printTable(t);
   statisctics(t);
   clearTable(t);
   printf("Время работы: %f\n", (float)(clock() - time1) / CLOCKS_PER_SEC);
