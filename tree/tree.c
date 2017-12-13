@@ -5,15 +5,22 @@ int n;
 struct tree {
   int number;
   int freq;
+  int freq_all;
   struct tree *left;
   struct tree *right;
 };
 
 struct tree *build_tree(int *a, int *f, int *p, int *q, int l, int r) {
+  // printf("%d %d\n", l, r);
   if (l == r) {
     struct tree *leaf = calloc(1, sizeof(struct tree));
+    if (!leaf) {
+      printf("Cannot allocate memory!\n");
+      exit(1);
+    }
     leaf->number = a[l];
     leaf->freq = f[l];
+    leaf->freq_all = f[l];
     leaf->left = NULL;
     leaf->right = NULL;
     return leaf;
@@ -22,41 +29,63 @@ struct tree *build_tree(int *a, int *f, int *p, int *q, int l, int r) {
     return NULL;
   }
   struct tree *node = calloc(1, sizeof(struct tree));
+  if (!node) {
+    printf("Cannot allocate memory!\n");
+    exit(1);
+  }
   int goal;
   if (r == n - 1) {
     goal = queries + p[l];
   } else {
-    int goal = p[r + 1] + p[l];
+    goal = p[r + 1] + p[l];
   }
-  int min = abs(q[1] - goal);
-  int min_i = 1;
+  int min = abs(q[l] - goal);
+  int min_i = l;
   for (int i = l; i < r; i++) {
     if (abs(q[i] - goal) < min) {
       min = abs(q[i] - goal);
       min_i = i;
     }
   }
+  // printf("%d %d %d\n", p[r + 1], p[l], goal);
   node->number = a[min_i];
+  // printf("%d\n", min_i);
   node->freq = f[min_i];
+  if (r == n - 1) {
+    node->freq_all = queries - p[l];
+  } else {
+    node->freq_all = p[r + 1] - p[l];
+  }
   node->left = build_tree(a, f, p, q, l, min_i - 1);
   node->right = build_tree(a, f, p, q, min_i + 1, r);
   return node;
 }
 
-void print_tree(struct tree *tr, int last, int last_freq, FILE *out) {
+void print_tree(struct tree *tr, int last, int last_freq, int last_freq_all,
+                FILE *out) {
   if (!last) {
     fprintf(out, "digraph {\n");
   }
   if (last) {
-    fprintf(out, "\"%d\\n%d\" -> \"%d\\n%d\";\n", last, last_freq, tr->number,
-            tr->freq);
+    fprintf(out, "\"%d\\n%d\\n%d\" -> \"%d\\n%d\\n%d\";\n", last, last_freq,
+            last_freq_all, tr->number, tr->freq, tr->freq_all);
   }
   if (tr->left) {
-    print_tree(tr->left, tr->number, tr->freq, out);
+    print_tree(tr->left, tr->number, tr->freq, tr->freq_all, out);
   }
   if (tr->right) {
-    print_tree(tr->right, tr->number, tr->freq, out);
+    print_tree(tr->right, tr->number, tr->freq, tr->freq_all, out);
   }
+}
+
+void clear_tree(struct tree *tr) {
+  if (tr->left) {
+    clear_tree(tr->left);
+  }
+  if (tr->right) {
+    clear_tree(tr->right);
+  }
+  free(tr);
 }
 // Описание алгоритма:
 // Необходимо минимизировать разницу между поддеревьями
@@ -70,7 +99,15 @@ void print_tree(struct tree *tr, int last, int last_freq, FILE *out) {
 
 int main(int argc, char const *argv[]) {
   FILE *fi = fopen("tree.txt", "r");
+  if (!fi) {
+    printf("Cannot open file!\n");
+    exit(1);
+  }
   FILE *out = fopen("out.dot", "w");
+  if (!out) {
+    printf("Cannot open file!\n");
+    exit(1);
+  }
   fscanf(fi, "%d", &n);
   int a[n];
   int f[n];
@@ -100,9 +137,13 @@ int main(int argc, char const *argv[]) {
     q[i] = p[i] + p[i + 1];
   }
   q[n - 1] = p[n - 1] + queries;
+  // for (int i = 0; i < n; i++) {
+  //   printf("%d %d %d %d\n", a[i], f[i], p[i], q[i]);
+  // }
   struct tree *result = build_tree(a, f, p, q, 0, n - 1);
-  print_tree(result, 0, 0, out);
+  print_tree(result, 0, 0, 0, out);
   fprintf(out, "}\n");
+  clear_tree(result);
   fclose(fi);
   fclose(out);
   return 0;
