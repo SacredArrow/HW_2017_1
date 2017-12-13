@@ -11,7 +11,6 @@ struct tree {
 };
 
 struct tree *build_tree(int *a, int *f, int *p, int *q, int l, int r) {
-  // printf("%d %d\n", l, r);
   if (l == r) {
     struct tree *leaf = calloc(1, sizeof(struct tree));
     if (!leaf) {
@@ -47,9 +46,7 @@ struct tree *build_tree(int *a, int *f, int *p, int *q, int l, int r) {
       min_i = i;
     }
   }
-  // printf("%d %d %d\n", p[r + 1], p[l], goal);
   node->number = a[min_i];
-  // printf("%d\n", min_i);
   node->freq = f[min_i];
   if (r == n - 1) {
     node->freq_all = queries - p[l];
@@ -137,9 +134,6 @@ int main(int argc, char const *argv[]) {
     q[i] = p[i] + p[i + 1];
   }
   q[n - 1] = p[n - 1] + queries;
-  // for (int i = 0; i < n; i++) {
-  //   printf("%d %d %d %d\n", a[i], f[i], p[i], q[i]);
-  // }
   struct tree *result = build_tree(a, f, p, q, 0, n - 1);
   print_tree(result, 0, 0, 0, out);
   fprintf(out, "}\n");
