@@ -57,9 +57,12 @@ void parseFile(struct Command **instructions, FILE *file) {
   int cnt = 0;
   while (fscanf(file, "%s", str) == 1) {
     instructions[cnt] = malloc(sizeof(struct Command));
+    if (!instructions[cnt]) {
+      printf("Error while allocating memory!\n");
+      exit(1);
+    }
     if (str[0] == ';') {
       fgets(str, 100, file);
-      printf("Comment found\n");
       continue;
     }
     if (!(strcmp(str, "ldc") == 0 || strcmp(str, "st") == 0 ||
@@ -69,7 +72,10 @@ void parseFile(struct Command **instructions, FILE *file) {
           strcmp(str, "ret") == 0)) {
       str[strlen(str) - 1] = '\0';
       labels[label_ptr] = malloc(sizeof(struct Label));
-      // printf("%s\n", str);
+      if (!labels[label_ptr]) {
+        printf("Error while allocating memory!\n");
+        exit(1);
+      }
       strcpy(labels[label_ptr]->name, str);
       labels[label_ptr]->point = cnt;
       label_ptr++;
@@ -79,7 +85,6 @@ void parseFile(struct Command **instructions, FILE *file) {
     if (strcmp(str, "ldc") == 0 || strcmp(str, "st") == 0 ||
         strcmp(str, "ld") == 0) {
       fscanf(file, "%d", &instructions[cnt]->value);
-      /* code */
     } else if (strcmp(str, "jmp") == 0 || strcmp(str, "br") == 0) {
       fscanf(file, "%s", instructions[cnt]->label_name);
     }
@@ -92,9 +97,17 @@ int main(int argc, char const *argv[]) {
   struct Stack *stack = malloc(sizeof(struct Stack));
   labels = malloc((1 << 19) * sizeof(struct Label));
   stack->top = malloc((1 << 19) * sizeof(int));
+  if (!data || !instructions || !stack || !labels || !stack->top) {
+    printf("Error while allocating memory!\n");
+    exit(1);
+  }
   stack->floor = stack->top;
-  char *name = "test.txt";
+  char *name = "gcd.txt";
   FILE *file = fopen(name, "r");
+  if (!file) {
+    printf("Cannot open file!\n");
+    exit(1);
+  }
   label_ptr = 0;
   parseFile(instructions, file);
   int ip = 0;
