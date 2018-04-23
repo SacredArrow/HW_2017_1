@@ -114,7 +114,6 @@ int main(int argc, char const *argv[]) {
 
   while (strcmp(instructions[ip]->text, "ret") != 0) {
     char *inst = instructions[ip]->text;
-    // printf("%s %d\n", inst, peek(stack));
     if (strcmp(inst, "ldc") == 0) {
       push(stack, instructions[ip]->value);
     } else if (strcmp(inst, "add") == 0) {
@@ -170,11 +169,6 @@ int main(int argc, char const *argv[]) {
   while (stack->top != stack->floor) {
     printf("%d\n", *stack->top);
     stack->top--;
-    /* code */
   }
-  // printf("%s %d\n", labels[0]->name, labels[0]->point);
-  // printf("%s %d\n", instructions[0]->text, instructions[0]->value);
-  // printf("%s %d\n", instructions[1]->text, instructions[1]->value);
-  // printf("%s %d\n", instructions[2]->text, instructions[2]->value);
   return 0;
 }
